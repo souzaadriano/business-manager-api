@@ -1,0 +1,30 @@
+model Stores {
+    id        String    @id
+    name      String    @unique
+    createdAt DateTime  @default(now())
+    updateAt  DateTime  @default(now())
+    deletedAt DateTime?
+
+    UserStore UserStore[]
+
+    @@map("stores")
+}
+
+model UserStore {
+    storeId String
+    userId  String
+
+    user  Users  @relation(fields: [userId], references: [id])
+    store Stores @relation(fields: [storeId], references: [id])
+
+    @@id([storeId, userId])
+    @@map("user_store")
+}
+
+//@relations
+model Users {
+    id        String      @id
+    UserStore UserStore[]
+
+    @@map("users")
+}
