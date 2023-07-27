@@ -1,5 +1,5 @@
-import { IUseCase } from '@/core/use-cases/use-case.contract';
+import { AbstractUseCase } from '@/core/use-cases/use-case.abstract';
 
 export interface IRequestHandler<RESPONSE> {
-  execute<INPUT, OUTPUT>(input: INPUT, useCase: IUseCase<INPUT, OUTPUT>): Promise<RESPONSE>;
+  execute<INPUT, OUTPUT>(input: INPUT, useCase: AbstractUseCase<INPUT, OUTPUT>): Promise<RESPONSE>;
 }
