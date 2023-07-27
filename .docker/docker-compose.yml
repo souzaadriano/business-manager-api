@@ -6,8 +6,8 @@ services:
     container_name: business_manager_db
     environment:
       POSTGRES_DB: business_manager
-      POSTGRES_PASSWORD: pg_pass
-      POSTGRES_USER: pg_user
+      POSTGRES_PASSWORD: db_pass
+      POSTGRES_USER: db_user
     ports:
       - 6001:5432
     restart: on-failure:3

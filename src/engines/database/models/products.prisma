@@ -1,0 +1,55 @@
+model Categories {
+    id      String @id
+    storeId String
+    name    String
+
+    store    Stores     @relation(fields: [storeId], references: [id])
+    Products Products[]
+
+    @@unique([storeId, name])
+    @@map("categories")
+}
+
+model Products {
+    id          String  @id
+    categoryId  String
+    storeId     String
+    name        String
+    description String
+    price       Decimal @db.Money
+    picture     String
+
+    createdAt DateTime
+    updateAt  DateTime
+    deletedAt DateTime?
+
+    store        Stores         @relation(fields: [storeId], references: [id])
+    category     Categories     @relation(fields: [categoryId], references: [id])
+    PriceHistory PriceHistory[]
+
+    @@map("products")
+}
+
+model PriceHistory {
+    productId String
+    changedAt DateTime @default(now())
+    price     Decimal  @db.Money
+    product   Products @relation(fields: [productId], references: [id])
+
+    @@id([productId, changedAt])
+    @@map("price_history")
+}
+
+//@relations
+model Stores {
+    id         String       @id
+    Categories Categories[]
+    Products   Products[]
+
+    @@map("stores")
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}

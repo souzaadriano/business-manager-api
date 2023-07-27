@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Permissions {
+  id              String            @id
+  name            String            @unique
+  createdAt       DateTime          @default(now())
+  updateAt        DateTime          @default(now())
+  deletedAt       DateTime?
+  RolePermissions RolePermissions[]
+  UserPermissions UserPermissions[]
+
+  @@map("permissions")
+}
+
+model Roles {
+  id              String            @id
+  name            String            @unique
+  createdAt       DateTime          @default(now())
+  updateAt        DateTime          @default(now())
+  deletedAt       DateTime?
+  RolePermissions RolePermissions[]
+  UserRoles       UserRoles[]
+
+  @@map("roles")
+}
+
+model RolePermissions {
+  roleId       String
+  permissionId String
+  role         Roles       @relation(fields: [roleId], references: [id])
+  permissions  Permissions @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model UserRoles {
+  roleId String
+  userId String
+  role   Roles  @relation(fields: [roleId], references: [id])
+  user   Users  @relation(fields: [userId], references: [id])
+
+  @@id([roleId, userId])
+  @@map("user_roles")
+}
+
+model UserPermissions {
+  permissionId String
+  userId       String
+  status       Boolean
+  permissions  Permissions @relation(fields: [permissionId], references: [id])
+  user         Users       @relation(fields: [userId], references: [id])
+
+  @@id([permissionId, userId])
+  @@map("user_permissions")
+}
+
+model Categories {
+  id      String @id
+  storeId String
+  name    String
+
+  store    Stores     @relation(fields: [storeId], references: [id])
+  Products Products[]
+
+  @@unique([storeId, name])
+  @@map("categories")
+}
+
+model Products {
+  id          String  @id
+  categoryId  String
+  storeId     String
+  name        String
+  description String
+  price       Decimal @db.Money
+  picture     String
+
+  createdAt DateTime
+  updateAt  DateTime
+  deletedAt DateTime?
+
+  store        Stores         @relation(fields: [storeId], references: [id])
+  category     Categories     @relation(fields: [categoryId], references: [id])
+  PriceHistory PriceHistory[]
+
+  @@map("products")
+}
+
+model PriceHistory {
+  productId String
+  changedAt DateTime @default(now())
+  price     Decimal  @db.Money
+  product   Products @relation(fields: [productId], references: [id])
+
+  @@id([productId, changedAt])
+  @@map("price_history")
+}
+
+model Stores {
+  id        String    @id
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @default(now())
+  deletedAt DateTime?
+
+  UserStore  UserStore[]
+  Categories Categories[]
+  Products   Products[]
+
+  @@map("stores")
+}
+
+model UserStore {
+  storeId String
+  userId  String
+
+  user  Users  @relation(fields: [userId], references: [id])
+  store Stores @relation(fields: [storeId], references: [id])
+
+  @@id([storeId, userId])
+  @@map("user_store")
+}
+
+model Users {
+  id              String            @id
+  name            String
+  email           String            @unique
+  hash            String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
+  deletedAt       DateTime?
+  UserRoles       UserRoles[]
+  UserPermissions UserPermissions[]
+  UserStore       UserStore[]
+
+  @@map("users")
+}
