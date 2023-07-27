@@ -8,19 +8,20 @@ import { HashHandlerMock } from '../../handlers/hash-handler/hash-handler.mock';
 import { UserRepository } from './user-repository.adapter';
 
 describe('users-repository.adapter', () => {
+  jest.useFakeTimers().setSystemTime(new Date('2023-07-27'));
   const usersAccessor: UsersAccessor = mock<UsersAccessor>();
   const hashHandler: IHashHandler = HashHandlerMock.get();
   const sut = new UserRepository({ usersAccessor, hashHandler });
 
   it('should be save user on databsae', async () => {
-    await sut.save(
-      UserModel.create({
-        email: 'test@test.com',
-        hash: new Hash('hash-test', hashHandler),
-        id: new Uuid('uuid'),
-        name: 'test',
-      }),
-    );
+    const user = UserModel.create({
+      email: 'test@test.com',
+      hash: new Hash('hash-test', hashHandler),
+      id: new Uuid('uuid'),
+      name: 'test',
+    });
+
+    await sut.save(user);
 
     expect(usersAccessor.createUser).toBeCalledTimes(1);
     expect(usersAccessor.createUser).toBeCalledWith({
@@ -28,6 +29,9 @@ describe('users-repository.adapter', () => {
       hash: 'hash-test',
       id: 'uuid',
       name: 'test',
+      createdAt: new Date('2023-07-27'),
+      updatedAt: new Date('2023-07-27'),
+      deletedAt: null,
     });
   });
 });
