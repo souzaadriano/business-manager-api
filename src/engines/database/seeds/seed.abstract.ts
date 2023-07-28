@@ -7,6 +7,8 @@ export abstract class AbstractSeed {
   protected readonly _generatorHandler = GeneratorHandlerFactory.instance();
   protected readonly _deleteAccessor = new DeleteAccessor();
 
+  abstract readonly name: string;
+
   abstract up(): Promise<void>;
   abstract down(): Promise<void>;
 }
