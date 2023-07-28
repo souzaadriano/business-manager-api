@@ -27,3 +27,7 @@ from
     "users"
 where
     "users"."email" = :email;
+
+/* @name __deleteAllUsers */
+delete from
+    users;
