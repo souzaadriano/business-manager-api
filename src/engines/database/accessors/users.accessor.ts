@@ -12,14 +12,12 @@ import { AbstractDatabaseAccessor } from './database-accessor.abstract';
 @Singleton
 export class UsersAccessor extends AbstractDatabaseAccessor {
   async createUser(params: ICreateUserParams): Promise<void> {
-    console.debug(params);
     await this._database.execute(params, createUser).catch((error) => {
       throw new DatabaseException({ error, operation: DATABASE_OPERATION.INSERT, statement: 'createUser' });
     });
   }
 
   async findByEmail(params: IFindByEmailParams): Promise<IFindByEmailResult> {
-    console.debug(params);
     return await this._database.queryOne(params, findByEmail).catch((error) => {
       throw new DatabaseException({ error, operation: DATABASE_OPERATION.SELECT, statement: 'findByEmail' });
     });

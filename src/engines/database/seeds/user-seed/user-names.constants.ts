@@ -1,0 +1,15 @@
+export const USER_NAMES = [
+  { first: 'Ricky', last: 'sanches', deleted: false },
+  { first: 'Morty', last: 'smith', deleted: false },
+  { first: 'Summer', last: 'smith', deleted: false },
+  { first: 'Jerry', last: 'smith', deleted: true },
+  { first: 'Beth', last: 'smith', deleted: false },
+  { first: 'Test', last: 'test', deleted: false },
+  { first: 'Luke', last: 'Skywalker', deleted: false },
+  { first: 'Darth', last: 'Vader', deleted: false },
+  { first: 'Obiwan', last: 'Kenobe', deleted: true },
+  { first: 'Frodo', last: 'Baggins', deleted: false },
+  { first: 'Gandalf', last: 'Gray', deleted: false },
+  { first: 'Aragorn', last: 'Second', deleted: false },
+  { first: 'samwise', last: 'gamgee', deleted: false },
+];

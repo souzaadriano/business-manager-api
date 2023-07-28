@@ -89,3 +89,27 @@ const findByEmailIR: any = {"usedParamSet":{"email":true},"params":[{"name":"ema
 export const findByEmail = new PreparedQuery<IFindByEmailParams,IFindByEmailResult>(findByEmailIR);
 
 
+/** 'DeleteAllUsers' parameters type */
+export type IDeleteAllUsersParams = void;
+
+/** 'DeleteAllUsers' return type */
+export type IDeleteAllUsersResult = void;
+
+/** 'DeleteAllUsers' query type */
+export interface IDeleteAllUsersQuery {
+  params: IDeleteAllUsersParams;
+  result: IDeleteAllUsersResult;
+}
+
+const deleteAllUsersIR: any = {"usedParamSet":{},"params":[],"statement":"delete from\n    users"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * delete from
+ *     users
+ * ```
+ */
+export const deleteAllUsers = new PreparedQuery<IDeleteAllUsersParams,IDeleteAllUsersResult>(deleteAllUsersIR);
+
+
