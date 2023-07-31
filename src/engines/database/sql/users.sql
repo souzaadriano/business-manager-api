@@ -31,3 +31,9 @@ where
 /* @name __deleteAllUsers */
 delete from
     users;
+
+/* @name findUserPermissionsByUserId */
+SELECT
+    "name"
+FROM
+    "permissions";

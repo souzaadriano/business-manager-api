@@ -113,3 +113,31 @@ const deleteAllUsersIR: any = {"usedParamSet":{},"params":[],"statement":"delete
 export const deleteAllUsers = new PreparedQuery<IDeleteAllUsersParams,IDeleteAllUsersResult>(deleteAllUsersIR);
 
 
+/** 'FindUserPermissionsByUserId' parameters type */
+export type IFindUserPermissionsByUserIdParams = void;
+
+/** 'FindUserPermissionsByUserId' return type */
+export interface IFindUserPermissionsByUserIdResult {
+  name: string;
+}
+
+/** 'FindUserPermissionsByUserId' query type */
+export interface IFindUserPermissionsByUserIdQuery {
+  params: IFindUserPermissionsByUserIdParams;
+  result: IFindUserPermissionsByUserIdResult;
+}
+
+const findUserPermissionsByUserIdIR: any = {"usedParamSet":{},"params":[],"statement":"SELECT\n    \"name\"\nFROM\n    \"permissions\""};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT
+ *     "name"
+ * FROM
+ *     "permissions"
+ * ```
+ */
+export const findUserPermissionsByUserId = new PreparedQuery<IFindUserPermissionsByUserIdParams,IFindUserPermissionsByUserIdResult>(findUserPermissionsByUserIdIR);
+
+

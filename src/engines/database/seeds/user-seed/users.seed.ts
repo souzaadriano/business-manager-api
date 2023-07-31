@@ -1,17 +1,19 @@
 import { HashHandlerFactory } from '@/factories/adapters';
 import { UsersAccessor } from '../../accessors';
-import { AbstractSeed } from '../seed.abstract';
+import { AbstractSeed, SEED_PURPOSE } from '../seed.abstract';
 import { USER_NAMES } from './user-names.constants';
 
 export class UsersSeed extends AbstractSeed {
   private readonly _userAccessor = new UsersAccessor();
   private readonly _hashHandler = HashHandlerFactory.instance();
 
+  readonly purpose = SEED_PURPOSE.DEVELOPMENT_POPULATE;
   readonly name = 'users';
 
   async up(): Promise<void> {
     const users = await this.generateUserInputs();
     await Promise.all(users.map((user) => this._userAccessor.createUser(user)));
+    console.log(`Created ${users.length} users`);
   }
 
   async down(): Promise<void> {
