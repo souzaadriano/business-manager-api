@@ -30,7 +30,7 @@ export class Session {
 
     this._id = parameters.id;
     this._handler = parameters.handler;
-    this._permissions = Permissions.fromArray(parameters.permissions, parameters.storeIds);
+    this._permissions = parameters.permissions;
     this._user = parameters.user;
     this._issuedAt = parameters.issuedAt;
     this._expireAt = parameters.issuedAt.clone();
@@ -113,11 +113,10 @@ export class Session {
 type TSessionParameters = {
   handler: ISessionHandler;
   id: Uuid;
-  permissions: string[];
+  permissions: Permissions;
   user: UserDTO;
   issuedAt: DateTime;
   refreshTime: TimeConverter;
-  storeIds: string[];
   tokenHandler: ITokenHandler<UserToken>;
   token?: string;
 };

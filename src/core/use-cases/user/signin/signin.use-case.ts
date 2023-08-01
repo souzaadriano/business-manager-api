@@ -17,8 +17,8 @@ export class SigninUseCase extends AbstractUseCase<Input, Output, Dependencies> 
 
   private async _createSession(user: UserModel) {
     const { sessionHandler } = this._dependencies;
-    const { permissions, storeIds } = await this._getPermissions(user);
-    return await sessionHandler.create({ user, permissions, storeIds });
+    const permissions = await this._getPermissions(user);
+    return await sessionHandler.create({ user, permissions });
   }
 
   private async _getUser(input: string) {
@@ -33,10 +33,7 @@ export class SigninUseCase extends AbstractUseCase<Input, Output, Dependencies> 
 
   private async _getPermissions(user: UserModel) {
     const { userRepository } = this._dependencies;
-    const permissions = await userRepository.findPermissions(user.id);
-    const storeIds = await userRepository.findStores(user.id);
-
-    return { permissions, storeIds };
+    return await userRepository.getPermissions(user);
   }
 }
 

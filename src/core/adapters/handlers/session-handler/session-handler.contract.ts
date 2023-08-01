@@ -1,4 +1,4 @@
-import { PERMISSIONS } from '@/core/domain/class/permissions/permission.enum';
+import { Permissions } from '@/core/domain/class/permissions/permissions.class';
 import { Session } from '@/core/domain/class/session/session.class';
 import { SessionDto } from '@/core/domain/class/session/session.dto';
 import { UserModel } from '@/core/domain/entities/user/user.model';
@@ -12,6 +12,5 @@ export interface ISessionHandler {
 
 export type TCreateSessionInput = {
   user: UserModel;
-  permissions: PERMISSIONS[];
-  storeIds: string[];
+  permissions: Permissions;
 };

@@ -1,4 +1,5 @@
 import { DateTime } from '@/core/domain/class/date-time/date-time.class';
+import { Permissions } from '@/core/domain/class/permissions/permissions.class';
 import { Session } from '@/core/domain/class/session/session.class';
 import { SessionDto } from '@/core/domain/class/session/session.dto';
 import { TimeConverter } from '@/core/domain/class/time-converter/time-converter.class';
@@ -14,7 +15,7 @@ export class SessionHandler implements ISessionHandler {
   constructor(private readonly _dependencies: Dependencies) {}
 
   async create(input: TCreateSessionInput): Promise<Session> {
-    const { user, permissions, storeIds } = input;
+    const { user, permissions } = input;
     const { generator, dateHandler, accessor, tokenHandler } = this._dependencies;
     const currentSession = await accessor.searchSessionByUserId(user.id);
     if (currentSession) return this._getCurrentSession(currentSession);
@@ -25,8 +26,7 @@ export class SessionHandler implements ISessionHandler {
       issuedAt: DateTime.now(dateHandler),
       refreshTime: new TimeConverter({ hours: 2 }),
       user: user.toDto(),
-      permissions,
-      storeIds,
+      permissions: permissions,
       tokenHandler: tokenHandler,
     });
     await session.token();
@@ -57,8 +57,7 @@ export class SessionHandler implements ISessionHandler {
       issuedAt: dateHandler.toDateTime(new Date(sessionDto.issuedAt)),
       refreshTime: new TimeConverter({ hours: 2 }),
       user: sessionDto.user,
-      permissions: sessionDto.permissions,
-      storeIds: sessionDto.storeIds,
+      permissions: Permissions.fromArray(sessionDto.permissions, sessionDto.storeIds),
       tokenHandler: tokenHandler,
       token: sessionDto.token,
     });
