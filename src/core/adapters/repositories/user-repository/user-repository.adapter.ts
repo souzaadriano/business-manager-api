@@ -1,5 +1,6 @@
 import { Email } from '@/core/domain/class/email/email.class';
 import { Hash } from '@/core/domain/class/hash/hash.class';
+import { PERMISSIONS } from '@/core/domain/class/permissions/permission.enum';
 import { Uuid } from '@/core/domain/class/uuid/uuid.class';
 import { UserModel } from '@/core/domain/entities/user/user.model';
 import { UsersAccessor } from '@/engines/database/accessors';
@@ -8,6 +9,18 @@ import { IUserRepository } from './user-repository.contract';
 
 export class UserRepository implements IUserRepository {
   constructor(private readonly _dependencies: Dependencies) {}
+
+  async findPermissions(userId: string): Promise<PERMISSIONS[]> {
+    const { usersAccessor } = this._dependencies;
+    const permissions = await usersAccessor.findPermissionsByUserId({ userId });
+    return permissions.map((p) => p.name as PERMISSIONS);
+  }
+
+  async findStores(userId: string): Promise<string[]> {
+    const { usersAccessor } = this._dependencies;
+    const permissions = await usersAccessor.findStoresByUserId({ userId });
+    return permissions.map((p) => p.storeId);
+  }
 
   async findByEmail(email: Email): Promise<UserModel | undefined> {
     const { usersAccessor, hashHandler } = this._dependencies;
