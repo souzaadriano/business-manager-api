@@ -1,6 +1,7 @@
 import { Email } from '../../class/email/email.class';
 import { Hash } from '../../class/hash/hash.class';
 import { Uuid } from '../../class/uuid/uuid.class';
+import { UserDTO } from '../../dtos/user.dto';
 
 export class UserModel {
   private readonly _uuid: Uuid;
@@ -45,6 +46,14 @@ export class UserModel {
 
   public get id(): string {
     return this._uuid.value;
+  }
+
+  public toDto() {
+    return new UserDTO({
+      id: this._uuid,
+      email: this._email,
+      name: this.name,
+    });
   }
 }
 

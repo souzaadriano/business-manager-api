@@ -1,0 +1,10 @@
+export enum LOG_PURPOSE {
+  STEP = 'STEP',
+  FINISH = 'FINISH',
+  ERROR = 'ERROR',
+}
+
+export enum LOG_STRATEGY {
+  APPEND_FILE = 'APPEND_FILE',
+  CONSOLE = 'CONSOLE',
+}

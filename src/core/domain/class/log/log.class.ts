@@ -58,7 +58,7 @@ export class Log {
       return;
     }
 
-    this._data.set('undefinedError', error as any);
+    this._data.set('error', error as any);
     this._handler.finish(this._getDataObject());
   }
 

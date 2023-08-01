@@ -11,7 +11,7 @@ export class DatabaseEngine implements IEngine {
 
   async init(): Promise<void> {
     if (this._client) return;
-    this._client = new Client(this._configuration);
+    this._client = new Client(this._connectionOptions());
     await this._client.connect();
   }
 
@@ -32,5 +32,15 @@ export class DatabaseEngine implements IEngine {
   private _isConnected(): void {
     if (this._client) return;
     throw new Error('database not connected');
+  }
+
+  private _connectionOptions() {
+    return {
+      host: this._configuration.host,
+      password: this._configuration.password,
+      user: this._configuration.user,
+      database: this._configuration.database,
+      port: this._configuration.port,
+    };
   }
 }
