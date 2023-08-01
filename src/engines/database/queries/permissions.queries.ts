@@ -6,6 +6,7 @@ export type IFindAllPermissionParams = void;
 
 /** 'FindAllPermission' return type */
 export interface IFindAllPermissionResult {
+  id: string;
   name: string;
 }
 
@@ -15,12 +16,13 @@ export interface IFindAllPermissionQuery {
   result: IFindAllPermissionResult;
 }
 
-const findAllPermissionIR: any = {"usedParamSet":{},"params":[],"statement":"SELECT\n    \"name\"\nFROM\n    \"permissions\""};
+const findAllPermissionIR: any = {"usedParamSet":{},"params":[],"statement":"SELECT\n    \"id\",\n    \"name\"\nFROM\n    \"permissions\""};
 
 /**
  * Query generated from SQL:
  * ```
  * SELECT
+ *     "id",
  *     "name"
  * FROM
  *     "permissions"

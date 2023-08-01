@@ -1,6 +1,7 @@
+import { PERMISSIONS } from '@/core/domain/class/permissions/permission.enum';
 import { PermissionAccessor } from '../../accessors/permission.accessor';
 import { AbstractSeed, SEED_PURPOSE } from '../seed.abstract';
-import { PermissionSeedHelper } from './permissions-seed.helper';
+import { PermissionSeedHelper, TPermissionInput } from './permissions-seed.helper';
 
 export class PermissionsSeed extends AbstractSeed {
   private readonly _helper = new PermissionSeedHelper();
@@ -10,14 +11,24 @@ export class PermissionsSeed extends AbstractSeed {
   readonly name = 'permissions';
 
   async up(): Promise<void> {
-    const { combination, registred, unregistred } = await this._helper.permissionsDiff(this._generatorHandler);
+    const dbPermissions = await this._readDbPermissions();
+    const { registred, unregistred } = await this._helper.permissionsDiff(this._generatorHandler, dbPermissions);
     await this._permissionsAccessor.addPermissions(unregistred);
-    await this._helper.updateFile(combination);
 
     console.log(`Created ${unregistred.length} new permissions, and have a total ${registred.length} of permissions`);
   }
 
   down(): Promise<void> {
     return;
+  }
+
+  private async _readDbPermissions() {
+    const permissions = await this._permissionsAccessor.readPermissions();
+    return permissions.map(
+      (permission): TPermissionInput => ({
+        id: permission.id,
+        name: permission.name as PERMISSIONS,
+      }),
+    );
   }
 }

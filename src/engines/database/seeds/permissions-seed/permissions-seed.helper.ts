@@ -1,14 +1,15 @@
 import { IGeneratorHandler } from '@/core/adapters/handlers/generator-handler/generator-handler.contract';
 import { PERMISSIONS } from '@/core/domain/class/permissions/permission.enum';
-import { readFile, writeFile } from 'fs/promises';
 
 export class PermissionSeedHelper {
   private readonly _filePath = 'src/engines/database/seeds/permissions-seed/permissions.data.json';
   private readonly _currentPermissions = Object.values(PERMISSIONS);
 
-  async permissionsDiff(generatorhandler: IGeneratorHandler): Promise<TPermissionsDiff> {
-    const input = await this._readPermissionsFile();
-    const permissions = new Set(input.map(({ name }) => name));
+  async permissionsDiff(
+    generatorhandler: IGeneratorHandler,
+    dbPermissions: TPermissionInput[],
+  ): Promise<TPermissionsDiff> {
+    const permissions = new Set(dbPermissions.map(({ name }) => name));
     const permissionsWithoutRegister = this._currentPermissions.filter((permission) => {
       return !permissions.has(permission);
     });
@@ -24,19 +25,10 @@ export class PermissionSeedHelper {
     });
 
     return {
-      combination: [...input, ...newPermissions],
-      registred: input,
+      combination: [...dbPermissions, ...newPermissions],
+      registred: dbPermissions,
       unregistred: newPermissions,
     };
-  }
-
-  async updateFile(input: TPermissionInput[]) {
-    await writeFile(this._filePath, JSON.stringify(input, null, '\t'));
-  }
-
-  private async _readPermissionsFile(): Promise<TPermissionInput[]> {
-    const permissions = await this._getPermissions();
-    return permissions;
   }
 
   private _generateDates() {
@@ -47,11 +39,6 @@ export class PermissionSeedHelper {
       deletedAt: null,
     };
   }
-
-  private async _getPermissions(): Promise<TPermissionInput[]> {
-    const rawFile = await readFile(this._filePath, { encoding: 'utf-8' });
-    return JSON.parse(rawFile);
-  }
 }
 
 type TPermissionsDiff = {
@@ -60,10 +47,7 @@ type TPermissionsDiff = {
   combination: TPermissionInput[];
 };
 
-type TPermissionInput = {
+export type TPermissionInput = {
   id: string;
   name: PERMISSIONS;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | null;
 };

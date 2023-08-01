@@ -1,5 +1,6 @@
 /* @name findAllPermission */
 SELECT
+    "id",
     "name"
 FROM
     "permissions";
