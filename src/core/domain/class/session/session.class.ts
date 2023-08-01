@@ -34,7 +34,7 @@ export class Session {
     this._user = parameters.user;
     this._issuedAt = parameters.issuedAt;
     this._expireAt = parameters.issuedAt.clone();
-    this.expireAt.add({ minutes: parameters.refreshTime.minutes() });
+    this._expireAt.add({ minutes: parameters.refreshTime.minutes() });
     this._refreshTime = parameters.refreshTime;
     this._tokenHandler = parameters.tokenHandler;
     if (parameters.token) this._tokenValue = parameters.token;

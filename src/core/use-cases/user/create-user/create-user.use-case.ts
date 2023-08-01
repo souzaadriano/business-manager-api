@@ -23,12 +23,6 @@ export class CreateUserUseCase extends AbstractUseCase<Input, Output, Dependenci
       logger.step('saveUser', user.id);
       await userRepository.save(user);
 
-      const output = {
-        id: user.id,
-        email: user.email,
-        createdAt: dateHandler.format(user.createdAt, DATE_FORMAT.STANDARD),
-      };
-
       logger.finish();
       return {
         id: user.id,
