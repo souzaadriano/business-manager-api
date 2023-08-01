@@ -36,3 +36,5 @@ lerna-debug.log*
 
 .env
 pg-typed.config.json
+
+/src/engines/database/seeds/permissions-seed/permissions.data.json
