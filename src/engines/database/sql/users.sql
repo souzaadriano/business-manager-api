@@ -33,7 +33,20 @@ delete from
     users;
 
 /* @name findUserPermissionsByUserId */
-SELECT
-    "name"
-FROM
-    "permissions";
+select
+    p."name"
+from
+    permissions p
+    inner join user_permissions up on up."permissionId" = p.id
+    inner join users u on u.id = up."userId"
+where
+    u.id = :userId
+    and up.status = true;
+
+/* @name findStoresByUserId */
+select
+    "storeId"
+from
+    user_store us
+where
+    us."userId" = :userId;
