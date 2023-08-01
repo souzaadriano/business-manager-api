@@ -107,10 +107,12 @@ model PriceHistory {
 model Stores {
   id        String    @id
   name      String    @unique
+  owner     String
   createdAt DateTime  @default(now())
   updateAt  DateTime  @default(now())
   deletedAt DateTime?
 
+  user       Users        @relation(fields: [owner], references: [id])
   UserStore  UserStore[]
   Categories Categories[]
   Products   Products[]
@@ -139,6 +141,7 @@ model Users {
   deletedAt       DateTime?
   UserRoles       UserRoles[]
   UserPermissions UserPermissions[]
+  Stores          Stores[]
   UserStore       UserStore[]
 
   @@map("users")
