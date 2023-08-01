@@ -11,6 +11,10 @@ export abstract class AbstractException extends Error {
     if (input instanceof Error) this._upgradeError(input);
   }
 
+  protected _setReason(message: string) {
+    this._setDetails('reason', message);
+  }
+
   public getDetails(): JsonDocument {
     const entries = Array.from(this._details.entries());
     return Object.fromEntries(entries);

@@ -1,0 +1,3 @@
+export enum REDIS_KEY_PREFIX {
+  USER_SESSION = 'USER_SESSION',
+}

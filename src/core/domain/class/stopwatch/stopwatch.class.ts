@@ -70,7 +70,6 @@ export class Stopwatch {
   private _total() {
     const first = this._getFirstBreak();
     const last = this._getLastBreak();
-    console.debug({ first, last });
     return last.timestamp - first.timestamp;
   }
 

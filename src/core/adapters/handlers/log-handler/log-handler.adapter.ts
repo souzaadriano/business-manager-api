@@ -1,6 +1,6 @@
 import { Log } from '@/core/domain/class/log/log.class';
 import { JsonDocument } from '@/core/domain/types/json-document.type';
-import { LogEventHandler } from '@/engines/event/handlers/log-event.handler';
+import { LogEventHandler } from '@/engines/event/handlers/log-event/log-event.handler';
 import { ILogHandler, TLogStep } from './log-handler.contract';
 
 export class LogHandler implements ILogHandler {
@@ -10,11 +10,15 @@ export class LogHandler implements ILogHandler {
     return new Log(context, this);
   }
 
-  step(step: TLogStep): void {
-    this._eventHandler.send(step);
+  step(data: TLogStep): void {
+    this._eventHandler.send({ kind: 'step', data });
   }
 
   finish(data: JsonDocument): void {
-    this._eventHandler.send(data);
+    this._eventHandler.send({ kind: 'finish', data });
   }
 }
+
+export type TLogFinishData = { kind: 'finish'; data: JsonDocument };
+export type TLogStepData = { kind: 'step'; data: TLogStep };
+export type TLogData = TLogFinishData | TLogStepData;

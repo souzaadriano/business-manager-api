@@ -113,3 +113,70 @@ const deleteAllUsersIR: any = {"usedParamSet":{},"params":[],"statement":"delete
 export const deleteAllUsers = new PreparedQuery<IDeleteAllUsersParams,IDeleteAllUsersResult>(deleteAllUsersIR);
 
 
+/** 'FindUserPermissionsByUserId' parameters type */
+export interface IFindUserPermissionsByUserIdParams {
+  userId?: string | null | void;
+}
+
+/** 'FindUserPermissionsByUserId' return type */
+export interface IFindUserPermissionsByUserIdResult {
+  name: string;
+}
+
+/** 'FindUserPermissionsByUserId' query type */
+export interface IFindUserPermissionsByUserIdQuery {
+  params: IFindUserPermissionsByUserIdParams;
+  result: IFindUserPermissionsByUserIdResult;
+}
+
+const findUserPermissionsByUserIdIR: any = {"usedParamSet":{"userId":true},"params":[{"name":"userId","required":false,"transform":{"type":"scalar"},"locs":[{"a":168,"b":174}]}],"statement":"select\n    p.\"name\"\nfrom\n    permissions p\n    inner join user_permissions up on up.\"permissionId\" = p.id\n    inner join users u on u.id = up.\"userId\"\nwhere\n    u.id = :userId\n    and up.status = true"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * select
+ *     p."name"
+ * from
+ *     permissions p
+ *     inner join user_permissions up on up."permissionId" = p.id
+ *     inner join users u on u.id = up."userId"
+ * where
+ *     u.id = :userId
+ *     and up.status = true
+ * ```
+ */
+export const findUserPermissionsByUserId = new PreparedQuery<IFindUserPermissionsByUserIdParams,IFindUserPermissionsByUserIdResult>(findUserPermissionsByUserIdIR);
+
+
+/** 'FindStoresByUserId' parameters type */
+export interface IFindStoresByUserIdParams {
+  userId?: string | null | void;
+}
+
+/** 'FindStoresByUserId' return type */
+export interface IFindStoresByUserIdResult {
+  storeId: string;
+}
+
+/** 'FindStoresByUserId' query type */
+export interface IFindStoresByUserIdQuery {
+  params: IFindStoresByUserIdParams;
+  result: IFindStoresByUserIdResult;
+}
+
+const findStoresByUserIdIR: any = {"usedParamSet":{"userId":true},"params":[{"name":"userId","required":false,"transform":{"type":"scalar"},"locs":[{"a":68,"b":74}]}],"statement":"select\n    \"storeId\"\nfrom\n    user_store us\nwhere\n    us.\"userId\" = :userId"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * select
+ *     "storeId"
+ * from
+ *     user_store us
+ * where
+ *     us."userId" = :userId
+ * ```
+ */
+export const findStoresByUserId = new PreparedQuery<IFindStoresByUserIdParams,IFindStoresByUserIdResult>(findStoresByUserIdIR);
+
+
