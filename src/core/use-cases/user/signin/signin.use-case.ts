@@ -2,7 +2,6 @@ import { IHashHandler } from '@/core/adapters/handlers/hash-handler/hash-handler
 import { ISessionHandler } from '@/core/adapters/handlers/session-handler/session-handler.contract';
 import { IUserRepository } from '@/core/adapters/repositories/user-repository/user-repository.contract';
 import { Email } from '@/core/domain/class/email/email.class';
-import { PERMISSIONS } from '@/core/domain/class/permissions/permission.enum';
 import { UserModel } from '@/core/domain/entities/user/user.model';
 import { AbstractUseCase } from '../../use-case.abstract';
 
@@ -18,7 +17,8 @@ export class SigninUseCase extends AbstractUseCase<Input, Output, Dependencies> 
 
   private async _createSession(user: UserModel) {
     const { sessionHandler } = this._dependencies;
-    return await sessionHandler.create({ user, permissions: [PERMISSIONS.ADMIN], storeIds: ['ABC'] });
+    const { permissions, storeIds } = await this._getPermissions(user);
+    return await sessionHandler.create({ user, permissions, storeIds });
   }
 
   private async _getUser(input: string) {
@@ -29,6 +29,14 @@ export class SigninUseCase extends AbstractUseCase<Input, Output, Dependencies> 
     if (user) return user;
 
     throw new Error();
+  }
+
+  private async _getPermissions(user: UserModel) {
+    const { userRepository } = this._dependencies;
+    const permissions = await userRepository.findPermissions(user.id);
+    const storeIds = await userRepository.findStores(user.id);
+
+    return { permissions, storeIds };
   }
 }
 
