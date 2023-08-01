@@ -8,15 +8,10 @@ import { AbstractUseCase } from '../../use-case.abstract';
 
 export class SigninUseCase extends AbstractUseCase<Input, Output, Dependencies> {
   async execute(input: Input): Promise<Output> {
-    console.log('chegou');
     const { email, password } = input;
-    console.log('chegou.2');
     const user = await this._getUser(email);
-    console.log('chegou.3');
     await user.hash.match(password);
-    console.log('chegou.4');
     const session = await this._createSession(user);
-    console.log('chegou.5');
     const { token } = await session.token();
     return { token, email: user.email, name: user.name, id: user.id };
   }

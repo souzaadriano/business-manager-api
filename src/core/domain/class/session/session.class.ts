@@ -28,8 +28,6 @@ export class Session {
       userId: new Uuid(parameters.user.id),
     });
 
-    console.log('session:constructor', parameters.storeIds);
-
     this._id = parameters.id;
     this._handler = parameters.handler;
     this._permissions = Permissions.fromArray(parameters.permissions, parameters.storeIds);

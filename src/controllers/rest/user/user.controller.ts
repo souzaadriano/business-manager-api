@@ -15,14 +15,12 @@ export class UserController {
 
   @Post()
   async createUser(@Body() input: CreateUserSchema, @Response() response: ExpressResponse) {
-    console.log('request', input);
     const { status, output } = await this._requestHandler.execute(input, this._createUser);
     return response.status(status).json(output);
   }
 
   @Post('signin')
   async startSession(@Body() input: SigninSchema, @Response() response: ExpressResponse) {
-    console.log('request', input);
     const { status, output } = await this._requestHandler.execute(input, this._signin);
     return response.status(status).json(output);
   }

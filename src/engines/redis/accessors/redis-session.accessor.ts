@@ -8,7 +8,6 @@ export class RedisSessionAccessor extends AbstractRedisAccessor {
   async setSession(session: Session): Promise<void> {
     const sessionDto = session.toSessionDTO();
     await this._redis.set(session.key, sessionDto.toJson(), session.expireTimeInSeconds).catch((error) => {
-      console.log(error);
       throw new RedisCommandException({
         error,
         key: session.key,
@@ -49,7 +48,6 @@ export class RedisSessionAccessor extends AbstractRedisAccessor {
         statement: 'getSession',
       });
     });
-    console.debug('unparsed input', input);
     return SessionDto.fromString(input);
   }
 }

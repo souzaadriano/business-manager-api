@@ -9,7 +9,6 @@ export class RedisEngine implements IEngine {
   private _client: Redis;
 
   async init(): Promise<void> {
-    console.log(this._configuration.toObject());
     if (this._client) return;
 
     this._client = new Redis({

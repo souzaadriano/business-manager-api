@@ -16,7 +16,6 @@ export class SessionHandler implements ISessionHandler {
   async create(input: TCreateSessionInput): Promise<Session> {
     const { user, permissions, storeIds } = input;
     const { generator, dateHandler, accessor, tokenHandler } = this._dependencies;
-    console.log('SessionHandler:create', storeIds);
     const currentSession = await accessor.searchSessionByUserId(user.id);
     if (currentSession) return this._getCurrentSession(currentSession);
 
