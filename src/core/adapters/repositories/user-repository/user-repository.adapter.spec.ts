@@ -9,9 +9,9 @@ import { UserRepository } from './user-repository.adapter';
 
 describe('users-repository.adapter', () => {
   jest.useFakeTimers().setSystemTime(new Date('2023-07-27'));
-  const usersAccessor: UsersAccessor = mock<UsersAccessor>();
+  const userAccessor: UsersAccessor = mock<UsersAccessor>();
   const hashHandler: IHashHandler = HashHandlerMock.get();
-  const sut = new UserRepository({ usersAccessor, hashHandler });
+  const sut = new UserRepository({ userAccessor, hashHandler });
 
   it('should be save user on databsae', async () => {
     const user = UserModel.create({
@@ -23,8 +23,8 @@ describe('users-repository.adapter', () => {
 
     await sut.save(user);
 
-    expect(usersAccessor.createUser).toBeCalledTimes(1);
-    expect(usersAccessor.createUser).toBeCalledWith({
+    expect(userAccessor.createUser).toBeCalledTimes(1);
+    expect(userAccessor.createUser).toBeCalledWith({
       email: 'test@test.com',
       hash: 'hash-test',
       id: 'uuid',
