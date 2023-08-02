@@ -17,7 +17,7 @@ export class RedisSessionAccessor extends AbstractRedisAccessor {
     });
   }
 
-  async getSession(token: UserToken): Promise<SessionDto> {
+  async getSession(token: UserToken): Promise<SessionDto | undefined> {
     return await this._getSession(token.key);
   }
 
@@ -39,7 +39,7 @@ export class RedisSessionAccessor extends AbstractRedisAccessor {
     });
   }
 
-  private async _getSession(key: string): Promise<SessionDto> {
+  private async _getSession(key: string): Promise<SessionDto | undefined> {
     const input = await this._redis.get(key).catch((error) => {
       throw new RedisCommandException({
         error,
@@ -48,6 +48,9 @@ export class RedisSessionAccessor extends AbstractRedisAccessor {
         statement: 'getSession',
       });
     });
+
+    if (!input) return undefined;
+
     return SessionDto.fromString(input);
   }
 }

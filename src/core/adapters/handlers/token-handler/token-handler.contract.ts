@@ -1,5 +1,7 @@
+import { BearerToken } from '@/core/domain/class/token/bearer-token.class';
+
 export interface ITokenHandler<PAYLOAD> {
-  sign(payload: PAYLOAD): Promise<string>;
-  verify(token: string): Promise<boolean>;
-  decode(token: string): Promise<PAYLOAD>;
+  sign(payload: PAYLOAD): Promise<BearerToken>;
+  verify(token: BearerToken): Promise<boolean>;
+  decode(token: BearerToken): Promise<PAYLOAD>;
 }

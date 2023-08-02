@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsString, Length, ValidateNested } from 'class-validator';
+import { IsOptional, IsString, Length, ValidateNested } from 'class-validator';
 import { CreateAddressSchema } from '../../shared/schemas/address.schema';
 
 export class CreateStoreSchema {
@@ -12,5 +12,6 @@ export class CreateStoreSchema {
   name: string;
 
   @IsString()
+  @IsOptional()
   userId: string;
 }
