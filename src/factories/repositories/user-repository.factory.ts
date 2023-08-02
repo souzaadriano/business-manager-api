@@ -9,7 +9,7 @@ export class UserRepositoryFactory {
   static instance(): IUserRepository {
     if (!UserRepositoryFactory._instance) {
       UserRepositoryFactory._instance = new UserRepository({
-        usersAccessor: new UsersAccessor(),
+        userAccessor: new UsersAccessor(),
         hashHandler: HashHandlerFactory.instance(),
       });
     }

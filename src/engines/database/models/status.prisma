@@ -1,0 +1,7 @@
+model ExceptionStatus {
+    id          Int    @id @default(autoincrement())
+    name        String
+    description String
+
+    @@map("exception_status")
+}

@@ -89,6 +89,44 @@ const findByEmailIR: any = {"usedParamSet":{"email":true},"params":[{"name":"ema
 export const findByEmail = new PreparedQuery<IFindByEmailParams,IFindByEmailResult>(findByEmailIR);
 
 
+/** 'FindById' parameters type */
+export interface IFindByIdParams {
+  id?: string | null | void;
+}
+
+/** 'FindById' return type */
+export interface IFindByIdResult {
+  createdAt: Date;
+  deletedAt: Date | null;
+  email: string;
+  hash: string;
+  id: string;
+  name: string;
+  updatedAt: Date;
+}
+
+/** 'FindById' query type */
+export interface IFindByIdQuery {
+  params: IFindByIdParams;
+  result: IFindByIdResult;
+}
+
+const findByIdIR: any = {"usedParamSet":{"id":true},"params":[{"name":"id","required":false,"transform":{"type":"scalar"},"locs":[{"a":55,"b":57}]}],"statement":"select\n    *\nfrom\n    \"users\"\nwhere\n    \"users\".\"id\" = :id"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * select
+ *     *
+ * from
+ *     "users"
+ * where
+ *     "users"."id" = :id
+ * ```
+ */
+export const findById = new PreparedQuery<IFindByIdParams,IFindByIdResult>(findByIdIR);
+
+
 /** 'DeleteAllUsers' parameters type */
 export type IDeleteAllUsersParams = void;
 
@@ -178,5 +216,74 @@ const findStoresByUserIdIR: any = {"usedParamSet":{"userId":true},"params":[{"na
  * ```
  */
 export const findStoresByUserId = new PreparedQuery<IFindStoresByUserIdParams,IFindStoresByUserIdResult>(findStoresByUserIdIR);
+
+
+/** 'SoftDeleteUser' parameters type */
+export interface ISoftDeleteUserParams {
+  deletedAt?: Date | string | null | void;
+  id?: string | null | void;
+}
+
+/** 'SoftDeleteUser' return type */
+export type ISoftDeleteUserResult = void;
+
+/** 'SoftDeleteUser' query type */
+export interface ISoftDeleteUserQuery {
+  params: ISoftDeleteUserParams;
+  result: ISoftDeleteUserResult;
+}
+
+const softDeleteUserIR: any = {"usedParamSet":{"deletedAt":true,"id":true},"params":[{"name":"deletedAt","required":false,"transform":{"type":"scalar"},"locs":[{"a":41,"b":50},{"a":71,"b":80}]},{"name":"id","required":false,"transform":{"type":"scalar"},"locs":[{"a":99,"b":101}]}],"statement":"UPDATE\n    \"users\"\nSET\n    \"deletedAt\" = :deletedAt,\n    \"updatedAt\" = :deletedAt\nwhere\n    \"id\" = :id"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * UPDATE
+ *     "users"
+ * SET
+ *     "deletedAt" = :deletedAt,
+ *     "updatedAt" = :deletedAt
+ * where
+ *     "id" = :id
+ * ```
+ */
+export const softDeleteUser = new PreparedQuery<ISoftDeleteUserParams,ISoftDeleteUserResult>(softDeleteUserIR);
+
+
+/** 'UpdateUser' parameters type */
+export interface IUpdateUserParams {
+  email?: string | null | void;
+  hash?: string | null | void;
+  id?: string | null | void;
+  name?: string | null | void;
+  updatedAt?: Date | string | null | void;
+}
+
+/** 'UpdateUser' return type */
+export type IUpdateUserResult = void;
+
+/** 'UpdateUser' query type */
+export interface IUpdateUserQuery {
+  params: IUpdateUserParams;
+  result: IUpdateUserResult;
+}
+
+const updateUserIR: any = {"usedParamSet":{"name":true,"email":true,"hash":true,"updatedAt":true,"id":true},"params":[{"name":"name","required":false,"transform":{"type":"scalar"},"locs":[{"a":36,"b":40}]},{"name":"email","required":false,"transform":{"type":"scalar"},"locs":[{"a":57,"b":62}]},{"name":"hash","required":false,"transform":{"type":"scalar"},"locs":[{"a":78,"b":82}]},{"name":"updatedAt","required":false,"transform":{"type":"scalar"},"locs":[{"a":103,"b":112}]},{"name":"id","required":false,"transform":{"type":"scalar"},"locs":[{"a":131,"b":133}]}],"statement":"UPDATE\n    \"users\"\nSET\n    \"name\" = :name,\n    \"email\" = :email,\n    \"hash\" = :hash,\n    \"updatedAt\" = :updatedAt\nwhere\n    \"id\" = :id"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * UPDATE
+ *     "users"
+ * SET
+ *     "name" = :name,
+ *     "email" = :email,
+ *     "hash" = :hash,
+ *     "updatedAt" = :updatedAt
+ * where
+ *     "id" = :id
+ * ```
+ */
+export const updateUser = new PreparedQuery<IUpdateUserParams,IUpdateUserResult>(updateUserIR);
 
 

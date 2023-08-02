@@ -62,6 +62,20 @@ model UserPermissions {
   @@map("user_permissions")
 }
 
+model Address {
+  id           String @id
+  street       String
+  neighborhood String
+  country      String
+  number       String
+  complement   String
+
+  updatedAt    DateTime
+  StoreProfile StoreProfile[]
+
+  @@map("address")
+}
+
 model Categories {
   id      String @id
   storeId String
@@ -104,18 +118,27 @@ model PriceHistory {
   @@map("price_history")
 }
 
+model ExceptionStatus {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+
+  @@map("exception_status")
+}
+
 model Stores {
   id        String    @id
   name      String    @unique
   owner     String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @default(now())
+  createdAt DateTime
+  updatedAt DateTime
   deletedAt DateTime?
 
-  user       Users        @relation(fields: [owner], references: [id])
-  UserStore  UserStore[]
-  Categories Categories[]
-  Products   Products[]
+  user         Users          @relation(fields: [owner], references: [id])
+  UserStore    UserStore[]
+  StoreProfile StoreProfile[]
+  Categories   Categories[]
+  Products     Products[]
 
   @@map("stores")
 }
@@ -129,6 +152,18 @@ model UserStore {
 
   @@id([storeId, userId])
   @@map("user_store")
+}
+
+model StoreProfile {
+  storeId   String
+  addressId String
+  logo      String?
+
+  store   Stores  @relation(fields: [storeId], references: [id])
+  address Address @relation(fields: [addressId], references: [id])
+
+  @@id([storeId])
+  @@map("store_profile")
 }
 
 model Users {
