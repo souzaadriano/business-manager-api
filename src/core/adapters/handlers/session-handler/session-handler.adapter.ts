@@ -14,6 +14,13 @@ import { ISessionHandler, TCreateSessionInput } from './session-handler.contract
 export class SessionHandler implements ISessionHandler {
   constructor(private readonly _dependencies: Dependencies) {}
 
+  async find(userToken: UserToken): Promise<Session | undefined> {
+    const { accessor } = this._dependencies;
+    const sessionDto = await accessor.getSession(userToken);
+    if (!sessionDto) return;
+    return this._getCurrentSession(sessionDto);
+  }
+
   async create(input: TCreateSessionInput): Promise<Session> {
     const { user, permissions } = input;
     const { generator, dateHandler, accessor, tokenHandler } = this._dependencies;

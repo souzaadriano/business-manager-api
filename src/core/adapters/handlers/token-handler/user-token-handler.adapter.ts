@@ -1,4 +1,5 @@
 import { SecretConfig } from '@/configurations/secret.config';
+import { BearerToken } from '@/core/domain/class/token/bearer-token.class';
 import { UserToken } from '@/core/domain/class/token/user-token.class';
 import { Uuid } from '@/core/domain/class/uuid/uuid.class';
 import { decode, sign, verify } from 'jsonwebtoken';
@@ -7,23 +8,24 @@ import { ITokenHandler } from './token-handler.contract';
 export class UserTokenHandler implements ITokenHandler<UserToken> {
   constructor(private readonly _dependencies: Dependencies) {}
 
-  async sign(payload: UserToken): Promise<string> {
+  async sign(payload: UserToken): Promise<BearerToken> {
     const { configuration } = this._dependencies;
     const data = payload.toDTO();
-    return sign(data, configuration.jwt);
+    const value = sign(data, configuration.jwt);
+    return new BearerToken(value);
   }
-  async verify(token: string): Promise<boolean> {
+  async verify(token: BearerToken): Promise<boolean> {
     const { configuration } = this._dependencies;
     try {
-      verify(token, configuration.jwt);
+      verify(token.value, configuration.jwt);
       return true;
     } catch (error) {
       return false;
     }
   }
-  async decode(token: string): Promise<UserToken> {
+  async decode(token: BearerToken): Promise<UserToken> {
     if (!(await this.verify(token))) throw new Error();
-    const payload = decode(token);
+    const payload = decode(token.value);
 
     if (typeof payload === 'string') throw new Error();
     if (!payload.sessionId) throw new Error();

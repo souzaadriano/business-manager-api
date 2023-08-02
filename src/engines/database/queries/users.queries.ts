@@ -127,28 +127,98 @@ const findByIdIR: any = {"usedParamSet":{"id":true},"params":[{"name":"id","requ
 export const findById = new PreparedQuery<IFindByIdParams,IFindByIdResult>(findByIdIR);
 
 
-/** 'DeleteAllUsers' parameters type */
-export type IDeleteAllUsersParams = void;
-
-/** 'DeleteAllUsers' return type */
-export type IDeleteAllUsersResult = void;
-
-/** 'DeleteAllUsers' query type */
-export interface IDeleteAllUsersQuery {
-  params: IDeleteAllUsersParams;
-  result: IDeleteAllUsersResult;
+/** 'HardDeleteUsers' parameters type */
+export interface IHardDeleteUsersParams {
+  ids: readonly (string | null | void)[];
 }
 
-const deleteAllUsersIR: any = {"usedParamSet":{},"params":[],"statement":"delete from\n    users"};
+/** 'HardDeleteUsers' return type */
+export type IHardDeleteUsersResult = void;
+
+/** 'HardDeleteUsers' query type */
+export interface IHardDeleteUsersQuery {
+  params: IHardDeleteUsersParams;
+  result: IHardDeleteUsersResult;
+}
+
+const hardDeleteUsersIR: any = {"usedParamSet":{"ids":true},"params":[{"name":"ids","required":false,"transform":{"type":"array_spread"},"locs":[{"a":48,"b":51}]}],"statement":"delete from\n    users\nwhere\n    \"users\".\"id\" in :ids"};
 
 /**
  * Query generated from SQL:
  * ```
  * delete from
  *     users
+ * where
+ *     "users"."id" in :ids
  * ```
  */
-export const deleteAllUsers = new PreparedQuery<IDeleteAllUsersParams,IDeleteAllUsersResult>(deleteAllUsersIR);
+export const hardDeleteUsers = new PreparedQuery<IHardDeleteUsersParams,IHardDeleteUsersResult>(hardDeleteUsersIR);
+
+
+/** 'HardDeleteUsersNotInList' parameters type */
+export interface IHardDeleteUsersNotInListParams {
+  ids: readonly (string | null | void)[];
+}
+
+/** 'HardDeleteUsersNotInList' return type */
+export type IHardDeleteUsersNotInListResult = void;
+
+/** 'HardDeleteUsersNotInList' query type */
+export interface IHardDeleteUsersNotInListQuery {
+  params: IHardDeleteUsersNotInListParams;
+  result: IHardDeleteUsersNotInListResult;
+}
+
+const hardDeleteUsersNotInListIR: any = {"usedParamSet":{"ids":true},"params":[{"name":"ids","required":false,"transform":{"type":"array_spread"},"locs":[{"a":52,"b":55}]}],"statement":"delete from\n    users\nwhere\n    \"users\".\"id\" not in :ids"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * delete from
+ *     users
+ * where
+ *     "users"."id" not in :ids
+ * ```
+ */
+export const hardDeleteUsersNotInList = new PreparedQuery<IHardDeleteUsersNotInListParams,IHardDeleteUsersNotInListResult>(hardDeleteUsersNotInListIR);
+
+
+/** 'FindManyUsersByEmail' parameters type */
+export interface IFindManyUsersByEmailParams {
+  emails: readonly (string | null | void)[];
+}
+
+/** 'FindManyUsersByEmail' return type */
+export interface IFindManyUsersByEmailResult {
+  createdAt: Date;
+  deletedAt: Date | null;
+  email: string;
+  hash: string;
+  id: string;
+  name: string;
+  updatedAt: Date;
+}
+
+/** 'FindManyUsersByEmail' query type */
+export interface IFindManyUsersByEmailQuery {
+  params: IFindManyUsersByEmailParams;
+  result: IFindManyUsersByEmailResult;
+}
+
+const findManyUsersByEmailIR: any = {"usedParamSet":{"emails":true},"params":[{"name":"emails","required":false,"transform":{"type":"array_spread"},"locs":[{"a":57,"b":63}]}],"statement":"select\n    *\nfrom\n    \"users\"\nwhere\n    \"users\".email in :emails"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * select
+ *     *
+ * from
+ *     "users"
+ * where
+ *     "users".email in :emails
+ * ```
+ */
+export const findManyUsersByEmail = new PreparedQuery<IFindManyUsersByEmailParams,IFindManyUsersByEmailResult>(findManyUsersByEmailIR);
 
 
 /** 'FindUserPermissionsByUserId' parameters type */
