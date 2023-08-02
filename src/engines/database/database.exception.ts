@@ -22,4 +22,5 @@ export enum DATABASE_OPERATION {
   DELETE = 'DELETE',
   UPDATE = 'UPDATE',
   SELECT = 'SELECT',
+  UPSERT = 'UPSERT',
 }

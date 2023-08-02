@@ -1,11 +1,14 @@
 model Stores {
     id        String    @id
     name      String    @unique
-    createdAt DateTime  @default(now())
-    updateAt  DateTime  @default(now())
+    owner     String
+    createdAt DateTime
+    updatedAt DateTime
     deletedAt DateTime?
 
-    UserStore UserStore[]
+    user         Users          @relation(fields: [owner], references: [id])
+    UserStore    UserStore[]
+    StoreProfile StoreProfile[]
 
     @@map("stores")
 }
@@ -21,10 +24,30 @@ model UserStore {
     @@map("user_store")
 }
 
+model StoreProfile {
+    storeId   String
+    addressId String
+    logo      String?
+
+    store   Stores  @relation(fields: [storeId], references: [id])
+    address Address @relation(fields: [addressId], references: [id])
+
+    @@id([storeId])
+    @@map("store_profile")
+}
+
 //@relations
 model Users {
     id        String      @id
     UserStore UserStore[]
+    Stores    Stores[]
 
     @@map("users")
+}
+
+model Address {
+    id           String         @id
+    StoreProfile StoreProfile[]
+
+    @@map("address")
 }

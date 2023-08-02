@@ -1,0 +1,11 @@
+model Address {
+    id           String   @id
+    street       String
+    neighborhood String
+    country      String
+    number       String
+    complement   String
+    updatedAt    DateTime
+
+    @@map("address")
+}
