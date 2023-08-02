@@ -7,5 +7,6 @@ model Users {
     updatedAt DateTime  @default(now())
     deletedAt DateTime?
 
+    @@index([email])
     @@map("users")
 }

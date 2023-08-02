@@ -54,7 +54,8 @@ export class Session {
 
   async token() {
     if (this._tokenValue) return { token: this._tokenValue, payload: this._token };
-    this._tokenValue = await this._tokenHandler.sign(this._token);
+    const bearerToken = await this._tokenHandler.sign(this._token);
+    this._tokenValue = bearerToken.value;
     return { payload: this._token, token: this._tokenValue };
   }
 

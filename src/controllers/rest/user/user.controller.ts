@@ -1,3 +1,4 @@
+import { Public } from '@/engines/nest/modules/auth/public.decorator';
 import { CreateUserFactory } from '@/factories/use-cases/create-user.factory';
 import { SigninFactory } from '@/factories/use-cases/signin.factory';
 import { Body, Controller, Get, Post, Response } from '@nestjs/common';
@@ -14,14 +15,16 @@ export class UserController {
   constructor(private readonly _requestHandler: RestRequestHandler) {}
 
   @Post()
+  @Public()
   async createUser(@Body() input: CreateUserSchema, @Response() response: ExpressResponse) {
-    const { status, output } = await this._requestHandler.execute(input, this._createUser);
+    const { status, output } = await this._requestHandler.execute(this._createUser, input);
     return response.status(status).json(output);
   }
 
   @Post('signin')
+  @Public()
   async startSession(@Body() input: SigninSchema, @Response() response: ExpressResponse) {
-    const { status, output } = await this._requestHandler.execute(input, this._signin);
+    const { status, output } = await this._requestHandler.execute(this._signin, input);
     return response.status(status).json(output);
   }
 

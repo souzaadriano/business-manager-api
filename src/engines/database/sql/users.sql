@@ -36,9 +36,28 @@ from
 where
     "users"."id" = :id;
 
-/* @name __deleteAllUsers */
+/* @name hardDeleteUsers @param ids -> (...) */
 delete from
-    users;
+    users
+where
+    "users"."id" in :ids;
+
+/* @name hardDeleteUsersNotInList @param ids -> (...) */
+delete from
+    users
+where
+    "users"."id" not in :ids;
+
+/* 
+ @name findManyUsersByEmail 
+ @param emails -> (...) 
+ */
+select
+    *
+from
+    "users"
+where
+    "users".email in :emails;
 
 /* @name findUserPermissionsByUserId */
 select

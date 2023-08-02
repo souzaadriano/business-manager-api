@@ -6,7 +6,6 @@ export class UserToken {
   private static readonly _prefix = REDIS_KEY_PREFIX.USER_SESSION;
   private readonly _sessionId: Uuid;
   private readonly _userId: Uuid;
-  private _value: string;
 
   constructor(parameters: TUserTokenParameters) {
     this._sessionId = parameters.sessionId;

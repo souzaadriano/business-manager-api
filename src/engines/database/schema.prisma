@@ -63,13 +63,12 @@ model UserPermissions {
 }
 
 model Address {
-  id           String @id
+  id           String         @id
   street       String
   neighborhood String
   country      String
   number       String
   complement   String
-
   updatedAt    DateTime
   StoreProfile StoreProfile[]
 
@@ -179,5 +178,6 @@ model Users {
   Stores          Stores[]
   UserStore       UserStore[]
 
+  @@index([email])
   @@map("users")
 }

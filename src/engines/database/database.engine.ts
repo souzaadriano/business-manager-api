@@ -41,9 +41,9 @@ export class DatabaseEngine implements IEngine {
   }
 
   private _query<INPUT, OUTPUT>(operation: DATABASE_OPERATION, fn: PreparedQuery<INPUT, OUTPUT>) {
-    this._isConnected();
     return async (params: INPUT): Promise<OUTPUT[]> => {
       return await fn.run(params, this._client).catch((error) => {
+        console.error(error);
         throw new DatabaseException({ error, operation, statement: DatabaseEngine._nameOf(fn) });
       });
     };
