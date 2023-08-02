@@ -13,7 +13,7 @@ export class PermissionsSeed extends AbstractSeed {
   async up(): Promise<void> {
     const dbPermissions = await this._readDbPermissions();
     const { registred, unregistred } = await this._helper.permissionsDiff(this._generatorHandler, dbPermissions);
-    await this._permissionsAccessor.addPermissions(unregistred);
+    for (const item of unregistred) await this._permissionsAccessor.createPermission(item);
 
     console.log(`Created ${unregistred.length} new permissions, and have a total ${registred.length} of permissions`);
   }
@@ -23,7 +23,7 @@ export class PermissionsSeed extends AbstractSeed {
   }
 
   private async _readDbPermissions() {
-    const permissions = await this._permissionsAccessor.readPermissions();
+    const permissions = await this._permissionsAccessor.findAllPermission();
     return permissions.map(
       (permission): TPermissionInput => ({
         id: permission.id,

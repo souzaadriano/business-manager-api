@@ -3,6 +3,7 @@ import { PreparedQuery } from '@pgtyped/runtime';
 import { Client } from 'pg';
 import { IEngine } from '../engine.contract';
 import { DatabaseConfig } from './database.config';
+import { DATABASE_OPERATION, DatabaseException } from './database.exception';
 
 @Singleton
 export class DatabaseEngine implements IEngine {
@@ -15,23 +16,61 @@ export class DatabaseEngine implements IEngine {
     await this._client.connect();
   }
 
-  public async query<INPUT, OUTPUT>(params: INPUT, fn: PreparedQuery<INPUT, OUTPUT>): Promise<OUTPUT[]> {
+  insert<INPUT, OUTPUT>(fn: PreparedQuery<INPUT, OUTPUT>): TExecuteCommand<INPUT> {
+    return this._execute(DATABASE_OPERATION.INSERT, fn);
+  }
+
+  delete<INPUT, OUTPUT>(fn: PreparedQuery<INPUT, OUTPUT>): TExecuteCommand<INPUT> {
+    return this._execute(DATABASE_OPERATION.DELETE, fn);
+  }
+
+  update<INPUT, OUTPUT>(fn: PreparedQuery<INPUT, OUTPUT>): TExecuteCommand<INPUT> {
+    return this._execute(DATABASE_OPERATION.UPDATE, fn);
+  }
+
+  select<INPUT, OUTPUT>(fn: PreparedQuery<INPUT, OUTPUT>): TQueryCommand<INPUT, OUTPUT[]> {
+    return this._query(DATABASE_OPERATION.SELECT, fn);
+  }
+
+  first<INPUT, OUTPUT>(fn: PreparedQuery<INPUT, OUTPUT>): TQueryCommand<INPUT, OUTPUT> {
+    return this._queryOne(DATABASE_OPERATION.SELECT, fn);
+  }
+
+  upsert<INPUT, OUTPUT>(fn: PreparedQuery<INPUT, OUTPUT>): TExecuteCommand<INPUT> {
+    return this._execute(DATABASE_OPERATION.UPSERT, fn);
+  }
+
+  private _query<INPUT, OUTPUT>(operation: DATABASE_OPERATION, fn: PreparedQuery<INPUT, OUTPUT>) {
     this._isConnected();
-    return await fn.run(params, this._client);
+    return async (params: INPUT): Promise<OUTPUT[]> => {
+      return await fn.run(params, this._client).catch((error) => {
+        throw new DatabaseException({ error, operation, statement: DatabaseEngine._nameOf(fn) });
+      });
+    };
   }
 
-  public async queryOne<INPUT, OUTPUT>(params: INPUT, fn: PreparedQuery<INPUT, OUTPUT>): Promise<OUTPUT | undefined> {
-    const [output] = await this.query(params, fn);
-    return output;
+  private _queryOne<INPUT, OUTPUT>(operation: DATABASE_OPERATION, fn: PreparedQuery<INPUT, OUTPUT>) {
+    const executor = this._query(operation, fn);
+    return async (params: INPUT): Promise<OUTPUT | undefined> => {
+      const [output] = await executor(params);
+      return output;
+    };
   }
 
-  public async execute<INPUT, OUTPUT>(params: INPUT, fn: PreparedQuery<INPUT, OUTPUT>): Promise<void> {
-    await this.query(params, fn);
+  private _execute<INPUT, OUTPUT>(operation: DATABASE_OPERATION, fn: PreparedQuery<INPUT, OUTPUT>) {
+    const executor = this._query(operation, fn);
+    return async (params: INPUT): Promise<void> => {
+      await executor(params);
+    };
   }
 
   private _isConnected(): void {
     if (this._client) return;
     throw new Error('database not connected');
+  }
+
+  private static _nameOf(f: any) {
+    return f.toString().replace(/[ |\(\)=>]/g, '');
   }
 
   private _connectionOptions() {
@@ -44,3 +83,6 @@ export class DatabaseEngine implements IEngine {
     };
   }
 }
+
+export type TExecuteCommand<INPUT> = (params: INPUT) => Promise<void>;
+export type TQueryCommand<INPUT, OUTPUT> = (params: INPUT) => Promise<OUTPUT>;

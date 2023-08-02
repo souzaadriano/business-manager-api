@@ -28,6 +28,14 @@ from
 where
     "users"."email" = :email;
 
+/* @name findById */
+select
+    *
+from
+    "users"
+where
+    "users"."id" = :id;
+
 /* @name __deleteAllUsers */
 delete from
     users;
@@ -50,3 +58,23 @@ from
     user_store us
 where
     us."userId" = :userId;
+
+/* @name softDeleteUser */
+UPDATE
+    "users"
+SET
+    "deletedAt" = :deletedAt,
+    "updatedAt" = :deletedAt
+where
+    "id" = :id;
+
+/* @name updateUser */
+UPDATE
+    "users"
+SET
+    "name" = :name,
+    "email" = :email,
+    "hash" = :hash,
+    "updatedAt" = :updatedAt
+where
+    "id" = :id;
