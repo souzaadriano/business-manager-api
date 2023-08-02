@@ -15,7 +15,7 @@ export class StoreController {
   constructor(private readonly _requestHandler: RestRequestHandler) {}
 
   @Post()
-  @Permission(PERMISSIONS.CREATE_CUSTOMER)
+  @Permission(PERMISSIONS.CREATE_STORE, PERMISSIONS.CREATE_OWN_STORE)
   async createStore(
     @Body() input: CreateStoreSchema,
     @UserSession() session: Session,

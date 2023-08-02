@@ -3,6 +3,7 @@ import { IGeneratorHandler } from '@/core/adapters/handlers/generator-handler/ge
 import { IStoreRepository } from '@/core/adapters/repositories/store-repository/store-repository.contract';
 import { IUserRepository } from '@/core/adapters/repositories/user-repository/user-repository.contract';
 import { TAddress } from '@/core/domain/class/address/address.class';
+import { PERMISSIONS } from '@/core/domain/class/permissions/permission.enum';
 import { Session } from '@/core/domain/class/session/session.class';
 import { Uuid } from '@/core/domain/class/uuid/uuid.class';
 import { UserDTO } from '@/core/domain/dtos/user.dto';
@@ -34,7 +35,7 @@ export class CreateStoreUseCase extends AbstractUseCase<Input, Output, Dependenc
 
   private async _getUser(session: Session, userId?: string): Promise<UserDTO> {
     if (!userId) return session.getUser();
-    //if (!session.hasPermission(PERMISSIONS.CREATE_STORE)) throw new Error('');
+    if (!session.hasPermission(PERMISSIONS.CREATE_STORE)) throw new Error('');
     const { userRepository } = this._dependencies;
     const user = await userRepository.findById(Uuid.create(userId));
     if (!user) throw new Error();
